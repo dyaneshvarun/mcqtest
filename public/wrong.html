@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<title>Quizee | Login</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="fluid-container">
+			<div class="fluid-container" style="background-color:#330066;height:100px;color:white">
+				<br/><h1 class="container">Quizee</h1>
+			</div>
+			
+			<div style="height:510px;">
+				<center><br/><br/><br/>
+				<div class="card col-sm-6">
+					<div class="card-header">
+						Login
+					</div>
+					<div class="card-body">
+						<form action="\login" method="POST">
+						  <div class="form-group">
+							<small class="text-danger">Wrong Username or Password.</small>
+							<!--label for="exampleInputEmail1">Email address</label-->
+							<input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+							
+						  </div>
+						  <div class="form-group">
+							<!--label for="exampleInputPassword1">Password</label-->
+							<input type="password" class="form-control" name="pwd" placeholder="Password">
+						  </div>
+						  <button type="submit" class="btn btn-success">Let me in</button>
+						  <small id="emailHelp" class="form-text text-muted">Don't have an account ? Get registered <a href="register.html">here</a></small>
+						  
+						</form>
+					</div>
+				</div>
+				</center>
+			</div>
+			<div class="fluid-container" style="height:50px;background-color:#190033;color:white;">
+				<p align="right">Designed by Dyanesh Varun D</p>
+			</div>
+		</div>
+	</body>
+</html>

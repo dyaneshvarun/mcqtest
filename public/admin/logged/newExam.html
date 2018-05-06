@@ -1,0 +1,106 @@
+<html>
+	<head>
+		<title>Quizee | Admin</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		
+		<script>
+			$(document).ready(function(){
+				$("#questions").focusout(function(){
+					var nod = $("#questions").val();
+					if(nod == ''){
+						console.log("error");
+					}else if(!$.isNumeric(nod)){
+						console.log("error");
+					}else{
+						$("#insert").empty();
+						for(var i=1;i<=nod;i++){
+							
+							var temp = "<input type='text' class='form-control ' placeholder='Question No "+i+"' id='ques"+i+"' required>";
+							for(var j =1;j<=4;j++)
+								temp+="<input type='text' class='form-control' placeholder='Option "+j+"' id='option"+i+j+"'>";
+							temp+="<input type='text' class='form-control' id='co"+i+"' placeholder='Correct Option : A / B / C / D' >";							
+							temp+="<br/>";
+							$("#insert").append(temp);
+						}
+					}
+				});
+				$("#fsub").submit(function(e){
+					e.preventDefault();
+					var exam = new Array();
+					for(var i=1;i<=$("#questions").val();i++){
+						var question = {};
+						question["ques"]=$("#ques"+i).val();
+						for(var j=1;j<=4;j++)question["option"+j]=$("#option"+i+j).val();
+						question["co"]=$("#co"+i).val();
+						exam.push(question);
+					}
+					JSON.stringify(exam);alert(exam);
+					$.post("/newexam",{
+						examObj : exam,
+						questions : $("#questions").val(),
+						name : $("#name").val(),
+						key : $("#key").val()
+					},function(data,status){
+						alert(status);
+						window.location.replace("newExam.html");
+					});
+				});
+			});
+		</script>	
+	</head>
+	<body>
+		<div class="fluid-container">
+			<div class="fluid-container" style="background-color:#330066;height:100px;color:white">
+				<br/><h1 class="container">Quizee</h1>
+			</div>
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			    <span class="navbar-toggler-icon"></span>
+			  </button>
+			  <div class="collapse navbar-collapse" id="navbarNav">
+			    <ul class="navbar-nav">
+			      <li class="nav-item ">
+				<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+			      </li>
+			      <li class="nav-item active">
+				<a class="nav-link" href="newExam.html">New Exam <span class="sr-only">(current)</span></a>
+			      </li>
+			      <li class="nav-item ">
+				<a class="nav-link" href="viewMarks.html">View Marks <span class="sr-only">(current)</span></a>
+			      </li>
+			      <li class="nav-item ">
+				<a class="nav-link" href="./../">Logout <span class="sr-only">(current)</span></a>
+			      </li>
+			    </ul>
+			  </div>
+			</nav>
+			<div style="min-height:470px;">
+				<center><br/><br/><br/>
+				<div class="card col-sm-9">
+					<div class="card-header">
+						Exam Creation
+					</div>
+					<div class="card-body">
+					     <form action="" method="POST" id="fsub">
+						  <div class="form-inline">	
+							<input type="text" class="form-control col-lg-6" id="name"  placeholder="Name of the Exam">	
+							<input type="text" class="form-control"   placeholder="Total Questions" id="questions">
+						  	<input type="password" class="form-control" id="key" placeholder="Exam Key" >
+						  </div>
+						  <br/>
+						  <div class="form-group" id="insert">
+						  </div>
+						  <button type="submit" class="btn btn-success" id="submitButton">Create Exam</button>
+					     </form>
+					</div>
+				</div>
+				</center>
+			</div>
+			<div class="fluid-container" style="height:50px;background-color:#190033;color:white;">
+				<p align="right">Designed by Dyanesh Varun D</p>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,107 @@
+<html>
+	<head>
+		<title>Quizee | Login</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		
+		<script>
+			function getQueryStringValue (key) {  
+			  return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
+			}  
+			var questions = [];
+			var options   = [];
+			var answers	= [];
+			// Would write the value of the QueryString-variable called name to the console  
+			console.log(getQueryStringValue("exam")); 
+			$.getJSON( "./../exams/"+getQueryStringValue("exam")+"EX.json", function( data ) {
+				  $.each( data, function( key, val ) {
+				    questions.push(val.ques);
+				    options.push(val.option1);
+				    options.push(val.option2);
+				    options.push(val.option3);
+				    options.push(val.option4);
+				    answers.push((key+1)+val.co);
+				  });
+				  console.log(questions,options,answers);
+				  var temp="";
+				  var k=0;
+				  for(var i = 1 ;i<=questions.length;i++)
+				  {
+					temp += "<p>Q"+i+". "+questions[i-1]+"</p>";
+					var j=1;
+					temp+= "<div class='form-group'>";
+					temp+= "<div class='form-check'><input class='form-check-input' type='radio' name='ques"+i+"' value='A'>"+options[k++]+"</div>";j++;
+					temp+= "<div class='form-check'><input class='form-check-input' type='radio' name='ques"+i+"' value='B'>"+options[k++]+"</div>";j++;
+					temp+= "<div class='form-check'><input class='form-check-input' type='radio' name='ques"+i+"' value='C'>"+options[k++]+"</div>";j++;
+					temp+= "<div class='form-check'><input class='form-check-input' type='radio' name='ques"+i+"' value='D'>"+options[k++]+"</div>";j++;
+					temp+= "</div>";				 
+				 }
+				  $("#insert").prepend(temp);
+				});
+			$(document).ready(function(){
+				
+				$("#insert").submit(function(e){e.preventDefault();
+					var score=0;
+					var ea = [];
+					for(var i = 1 ;i<=questions.length;i++)
+				 	{
+						ea.push(i+$("input[name='ques"+i+"']:checked").val());
+					}
+					console.log(ea);
+					for(var j=1;j<=questions.length;j++)
+					{		
+						if(answers.includes(ea[j-1])) score+=1;
+					}	
+					console.log(score);
+					$.post("/sendmark",{marks : score,examid :getQueryStringValue("exam")},function(data,status){
+							console.log(status);
+							if(data=="Done") window.location.replace("/participant/index.html");
+					});				
+				});
+			});
+		</script>	
+	</head>
+	<body>
+		<div class="fluid-container">
+			<div class="fluid-container" style="background-color:#330066;height:100px;color:white">
+				<br/><h1 class="container">Quizee</h1>
+			</div>
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			    <span class="navbar-toggler-icon"></span>
+			  </button>
+			  <div class="collapse navbar-collapse" id="navbarNav">
+			    <ul class="navbar-nav">
+			      <li class="nav-item active">
+				<a class="nav-link" href="index.html">Access Exam <span class="sr-only">(current)</span></a>
+			      </li>
+			      <li class="nav-item ">
+				<a class="nav-link" href="viewMarks.html">View Marks <span class="sr-only">(current)</span></a>
+			      </li>
+			      <li class="nav-item ">
+				<a class="nav-link" href="../index.html">Logout <span class="sr-only">(current)</span></a>
+			      </li>
+			    </ul>
+			  </div>
+			</nav>
+			<div style="min-height:470px;">
+				<br/><br/><br/>
+				<div class="card col-sm-6" style="margin-left:25%;margin-bottom:5%;">
+					<div class="card-header">
+						Exam
+					</div>
+					<div class="card-body float-left">
+						<form  id="insert">
+							<input type="submit" class="btn btn-success col-lg-6" style="margin-left:25%;">
+						</form>
+					</div>
+				</div>
+				
+			</div>
+			<div class="fluid-container" style="height:50px;background-color:#190033;color:white;">
+				<p align="right">Designed by Dyanesh Varun D</p>
+			</div>
+		</div>
+	</body>
+</html>
